@@ -6,4 +6,5 @@ pluginManagement {
 
 rootProject.name = 'kongmink-petclinic'
 
-include 'petclinic-app'
+include 'petclinic-api',
+		'petclinic-app'

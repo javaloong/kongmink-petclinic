@@ -7,4 +7,7 @@ pluginManagement {
 rootProject.name = 'kongmink-petclinic'
 
 include 'petclinic-api',
-		'petclinic-app'
+		'petclinic-app',
+		'petclinic-plugin-vets'
+		
+project(":petclinic-plugin-vets").projectDir = file("plugins/petclinic-plugin-vets")

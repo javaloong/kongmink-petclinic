@@ -1,0 +1,22 @@
+plugins {
+    id 'application'
+}
+
+description = 'petclinic-plugin-vets'
+
+dependencies {
+    compileOnly project(':petclinic-api')
+    compileOnly "org.javaloong.kongmink:pf4j-spring-boot:${pf4jSpringBootVersion}"
+    
+    implementation "org.springframework.boot:spring-boot-starter-web"
+}
+
+//*************************************************************************
+// App Properties
+//*************************************************************************
+
+mainClassName = 'org.javaloong.kongmink.petclinic.vets.VetPluginStarter'
+
+manifest {
+    attributes 'Main-Class': 'org.javaloong.kongmink.petclinic.vets.VetPluginStarter'
+}

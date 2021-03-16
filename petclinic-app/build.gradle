@@ -1,0 +1,27 @@
+plugins {
+    id 'org.springframework.boot'
+    id 'application'
+}
+
+description = 'petclinic-app'
+
+dependencies {
+    implementation "org.javaloong.kongmink:pf4j-spring-boot-starter:${pf4jSpringBootVersion}"
+    
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+//*************************************************************************
+// App Properties
+//*************************************************************************
+
+mainClassName = 'org.javaloong.kongmink.petclinic.app.Application'
+
+manifest {
+    attributes 'Main-Class': 'org.javaloong.kongmink.petclinic.app.Application'
+}

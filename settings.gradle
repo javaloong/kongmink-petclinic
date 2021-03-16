@@ -1,0 +1,9 @@
+pluginManagement {
+  plugins {
+        id 'org.springframework.boot' version "${springBootVersion}"
+    }
+}
+
+rootProject.name = 'kongmink-petclinic'
+
+include 'petclinic-app'

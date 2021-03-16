@@ -1,0 +1,1 @@
+Spring PetClinic Sample Application built with Spring Boot Plugin.

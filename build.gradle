@@ -1,0 +1,162 @@
+def isApplicationProject(String projectName) {
+    return projectName.endsWith('-app')
+}
+
+def isLibraryProject(String projectName) {
+    return projectName.endsWith('-api')
+}
+
+def isPluginProject(Project project) {
+    return project.hasProperty("plugin")
+}
+
+plugins {
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE' apply false
+    id 'org.unbroken-dome.test-sets' version '3.0.1' apply false
+}
+
+allprojects {
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.unbroken-dome.test-sets'
+	apply plugin: 'maven-publish'
+    
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+        }
+    }
+    
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+    
+    tasks.withType(Javadoc) {
+        options.encoding = 'UTF-8'
+        if(JavaVersion.current().isJava9Compatible()) {
+            options.addBooleanOption('html5', true)
+        }
+    }
+    
+    jar {
+        manifest.attributes provider: 'gradle'
+        enabled true
+        doFirst {
+            archiveFileName = "$project.name-${archiveVersion.get()}.${archiveExtension.get()}"
+        }
+    } 
+    
+    repositories {
+        mavenLocal()
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        mavenCentral()
+    }
+    
+    testSets {
+        integrationTest { dirName = 'integration-test' }
+    }
+ 
+    project.integrationTest {
+        outputs.upToDateWhen { false }
+    }
+ 
+    check.dependsOn integrationTest
+    integrationTest.mustRunAfter test
+ 
+    tasks.withType(Test) {
+        reports.html.destination = file("${reporting.baseDir}/${name}")
+    }
+	
+	//*************************************************************************
+    // Build Tasks
+    //*************************************************************************
+
+    task("buildApp") {
+        finalizedBy jar
+    }
+	
+	if (isApplicationProject(name)) {
+        
+        task deployToLocal(type: Copy) {
+            group 'build'
+            dependsOn build
+            from "$buildDir/libs/"
+            into "$rootDir/build/${project.name}"
+        }
+    }
+    
+    //*************************************************************************
+    // Plugin
+    //*************************************************************************
+
+    if (isPluginProject(project)) {
+	
+		configurations {
+			localLibs
+			compile.extendsFrom(localLibs)
+		}
+		
+		dependencies {
+			localLibs fileTree(dir: 'libs', include: '**')
+			annotationProcessor "org.pf4j:pf4j:${pf4jVersion}"
+			testAnnotationProcessor "org.pf4j:pf4j:${pf4jVersion}"
+		}
+
+        Properties pluginProp = new Properties()
+        pluginProp.load(file('plugin.properties').newDataInputStream())
+
+        task buildPlugin(type: Jar) {
+            group 'build'
+            dependsOn build
+            manifest.attributes(
+                    "Plugin-Id": pluginProp.get("plugin.id"),
+                    "Plugin-Class": pluginProp.get("plugin.class"),
+                    "Plugin-Version": pluginProp.get("plugin.version"),
+                    "Plugin-Provider": pluginProp.get("plugin.provider"),
+                    "Plugin-Dependencies": pluginProp.get("plugin.dependencies"))
+            from configurations.localLibs.asFileTree.files.collect { zipTree(it) } // flat all lib classes into a fat Jar
+//            from configurations.localLibs.asFileTree.files
+            with jar
+            doLast {
+                // Deploy built plugins...
+            }
+        }
+
+        task deployToLocal(type: Copy) {
+            group 'build'
+            dependsOn buildPlugin
+            from "$buildDir/libs/"
+            into "$rootDir/build/${plugin}/plugins"
+        }
+    }
+	
+	//*************************************************************************
+    // Maven
+    //*************************************************************************
+    
+    if (isLibraryProject(name)) {
+        task sourcesJar(type: Jar) {
+            from sourceSets.main.allJava
+            classifier = 'sources'
+        }
+    
+        publishing {
+            publications {
+                mavenJava(MavenPublication) {
+                    version = project.hasProperty('release') ? project.version - '-SNAPSHOT' : project.version
+                    
+                    from components.java
+                    artifact sourcesJar
+                }
+            }
+        }
+    }
+}

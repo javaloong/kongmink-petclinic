@@ -106,8 +106,8 @@ subprojects {
 		
 		dependencies {
 			localLibs fileTree(dir: 'libs', include: '**')
-			annotationProcessor "org.pf4j:pf4j:${pf4jVersion}"
-			testAnnotationProcessor "org.pf4j:pf4j:${pf4jVersion}"
+			annotationProcessor "org.pf4j:pf4j:$pf4jVersion"
+			testAnnotationProcessor "org.pf4j:pf4j:$pf4jVersion"
 		}
 
         Properties pluginProp = new Properties()

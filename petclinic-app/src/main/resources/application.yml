@@ -8,7 +8,11 @@ logging:
     root: INFO
     
 spring:
-  profiles.active: dev
+  resources:
+    chain:
+      enabled: false
+  thymeleaf:    mode: HTML
+  messages:    basename: messages/messages
   pf4j:
     runtime-mode: development
     enabled: true
@@ -19,4 +23,4 @@ spring:
         main:
           banner-mode: off
     controller:
-      base-path: admin
+      base-path: admin    

@@ -6,12 +6,19 @@ description = 'petclinic-plugin-vets'
 
 dependencies {
     compileOnly project(':petclinic-api')
-    compileOnly "org.javaloong.kongmink:pf4j-spring-boot:${pf4jSpringBootVersion}"
+    compileOnly "org.javaloong.kongmink:pf4j-spring-boot:$pf4jSpringBootVersion"
     
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     
     runtimeOnly 'org.hsqldb:hsqldb'
+    
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+
+    integrationTestImplementation "org.dbunit:dbunit:${dbunitVersion}"
+    integrationTestImplementation "com.github.ppodgorsek:spring-test-dbunit-core:$springtestdbunitVersion"
 }
 
 //*************************************************************************

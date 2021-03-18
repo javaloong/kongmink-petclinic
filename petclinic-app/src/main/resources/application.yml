@@ -13,6 +13,7 @@ spring:
       enabled: false
   thymeleaf:    mode: HTML
   messages:    basename: messages/messages
+  flyway:    enabled: false
   pf4j:
     runtime-mode: development
     enabled: true
@@ -23,4 +24,4 @@ spring:
         main:
           banner-mode: off
     controller:
-      base-path: admin    
+      base-path: admin

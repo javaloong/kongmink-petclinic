@@ -1,6 +1,25 @@
 spring:
   jpa:
-    hibernate:
-      ddl-auto: create-drop
+    open-in-view: true
     show-sql: true
-    open-in-view: false
+    hibernate:
+      ddl-auto: none
+  flyway:
+    out-of-order: true
+    validate-on-migrate: false
+    locations: classpath:db/migration/hsqldb
+   
+---
+spring:
+  profiles: mysql
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/petclinic?autoReconnect=true&useUnicode=true&characterEncoding=UTF8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    locations: classpath:db/migration/mysql

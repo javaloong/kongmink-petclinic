@@ -9,6 +9,7 @@ logging:
     
 spring:
   resources:
+    cache:      cachecontrol:        max-age: 12h
     chain:
       enabled: false
   thymeleaf:    mode: HTML
@@ -25,3 +26,5 @@ spring:
           banner-mode: off
     controller:
       base-path: admin
+
+management:  endpoints:    web:      exposure:        include: "*"

@@ -1,9 +1,9 @@
 spring:
   jpa:
-    open-in-view: true
+    open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
   flyway:
     out-of-order: true
     validate-on-migrate: false

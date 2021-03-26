@@ -1,5 +1,6 @@
 package org.javaloong.kongmink.petclinic.visits;
 
+import org.javaloong.kongmink.petclinic.customers.service.PetService;
 import org.javaloong.kongmink.pf4j.spring.boot.SharedDataSourceSpringBootstrap;
 import org.javaloong.kongmink.pf4j.spring.boot.SpringBootPlugin;
 import org.javaloong.kongmink.pf4j.spring.boot.SpringBootstrap;
@@ -16,6 +17,7 @@ public class VisitPlugin extends SpringBootPlugin {
 
     @Override
     protected SpringBootstrap createSpringBootstrap() {
-        return new SharedDataSourceSpringBootstrap(this, VisitPluginStarter.class);
+        return new SharedDataSourceSpringBootstrap(this, VisitPluginStarter.class)
+                .importBean(PetService.class);
     }
 }

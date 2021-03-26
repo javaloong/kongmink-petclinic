@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.javaloong.kongmink.petclinic.customers.repository;
+package org.javaloong.kongmink.petclinic.visits.repository;
 
 import java.util.List;
 
 import org.javaloong.kongmink.petclinic.api.model.BaseEntity;
-import org.javaloong.kongmink.petclinic.customers.model.Visit;
+import org.javaloong.kongmink.petclinic.visits.model.Visit;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.Repository;
 

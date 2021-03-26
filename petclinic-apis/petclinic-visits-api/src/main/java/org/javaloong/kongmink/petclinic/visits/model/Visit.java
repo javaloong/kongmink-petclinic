@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.javaloong.kongmink.petclinic.customers.model;
+package org.javaloong.kongmink.petclinic.visits.model;
 
 import java.time.LocalDate;
 

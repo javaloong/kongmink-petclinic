@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -32,8 +33,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.javaloong.kongmink.petclinic.api.model.NamedEntity;
-import org.springframework.beans.support.MutableSortDefinition;
-import org.springframework.beans.support.PropertyComparator;
+import org.javaloong.kongmink.petclinic.visits.model.Visit;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -99,7 +99,7 @@ public class Pet extends NamedEntity {
 
 	public List<Visit> getVisits() {
 		List<Visit> sortedVisits = new ArrayList<>(getVisitsInternal());
-		PropertyComparator.sort(sortedVisits, new MutableSortDefinition("date", false, false));
+		sortedVisits.sort(Comparator.comparing(Visit::getDate).reversed());
 		return Collections.unmodifiableList(sortedVisits);
 	}
 

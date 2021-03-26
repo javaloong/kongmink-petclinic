@@ -16,14 +16,19 @@
 package org.javaloong.kongmink.petclinic.customers.web;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.javaloong.kongmink.petclinic.customers.model.Owner;
 import org.javaloong.kongmink.petclinic.customers.model.Pet;
 import org.javaloong.kongmink.petclinic.customers.repository.OwnerRepository;
-import org.javaloong.kongmink.petclinic.customers.repository.VisitRepository;
+import org.javaloong.kongmink.petclinic.visits.model.Visit;
+import org.javaloong.kongmink.petclinic.visits.service.VisitService;
+import org.pf4j.PluginManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -47,11 +52,11 @@ class OwnerController {
 
 	private final OwnerRepository owners;
 
-	private VisitRepository visits;
+	@Autowired(required = false) @Lazy
+	private PluginManager pluginManager;
 
-	public OwnerController(OwnerRepository clinicService, VisitRepository visits) {
+	public OwnerController(OwnerRepository clinicService) {
 		this.owners = clinicService;
-		this.visits = visits;
 	}
 
 	@InitBinder
@@ -140,10 +145,20 @@ class OwnerController {
 		ModelAndView mav = new ModelAndView("owners/ownerDetails");
 		Owner owner = this.owners.findById(ownerId);
 		for (Pet pet : owner.getPets()) {
-			pet.setVisitsInternal(visits.findByPetId(pet.getId()));
+			pet.setVisitsInternal(getVisits(pet.getId()));
 		}
 		mav.addObject(owner);
 		return mav;
+	}
+	
+	private Collection<Visit> getVisits(int petId){
+	    if(pluginManager == null) {
+	        return Collections.emptyList();
+	    }
+	    
+	    return pluginManager.getExtensions(VisitService.class)
+	            .stream().findFirst().map(s -> s.findByPetId(petId))
+	            .orElse(Collections.emptyList());
 	}
 
 }

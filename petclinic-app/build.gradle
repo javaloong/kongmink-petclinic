@@ -7,6 +7,8 @@ description = 'petclinic-app'
 
 dependencies {
     implementation project(':petclinic-api')
+    implementation project(':petclinic-customers-api')
+    implementation project(':petclinic-visits-api')
     implementation "org.javaloong.kongmink:pf4j-spring-boot-starter:$pf4jSpringBootVersion"
     
     implementation 'org.springframework.boot:spring-boot-starter-actuator'

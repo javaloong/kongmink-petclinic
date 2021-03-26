@@ -5,8 +5,10 @@ plugins {
 description = 'petclinic-plugin-customers'
 
 dependencies {
-    compileOnly project(':petclinic-api')
-    compileOnly "org.javaloong.kongmink:pf4j-spring-boot:$pf4jSpringBootVersion"
+    implementation project(':petclinic-api')
+    implementation project(':petclinic-customers-api')
+    implementation project(':petclinic-visits-api')
+    implementation "org.javaloong.kongmink:pf4j-spring-boot:$pf4jSpringBootVersion"
     
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation "org.springframework.boot:spring-boot-starter-web"

@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.javaloong.kongmink.petclinic.customers.web;
+package org.javaloong.kongmink.petclinic.visits.web;
 
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.javaloong.kongmink.petclinic.customers.model.Pet;
-import org.javaloong.kongmink.petclinic.customers.model.Visit;
-import org.javaloong.kongmink.petclinic.customers.repository.PetRepository;
-import org.javaloong.kongmink.petclinic.customers.repository.VisitRepository;
+import org.javaloong.kongmink.petclinic.customers.service.PetService;
+import org.javaloong.kongmink.petclinic.visits.model.Visit;
+import org.javaloong.kongmink.petclinic.visits.repository.VisitRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -44,9 +44,9 @@ class VisitController {
 
     private final VisitRepository visits;
 
-    private final PetRepository pets;
+    private final PetService pets;
 
-    public VisitController(VisitRepository visits, PetRepository pets) {
+    public VisitController(VisitRepository visits, PetService pets) {
         this.visits = visits;
         this.pets = pets;
     }
@@ -76,14 +76,14 @@ class VisitController {
     // Spring MVC calls method loadPetWithVisit(...) before initNewVisitForm is called
     @GetMapping("/owners/*/pets/{petId}/visits/new")
     public String initNewVisitForm(@PathVariable("petId") int petId, Map<String, Object> model) {
-        return "pets/createOrUpdateVisitForm";
+        return "visits/createOrUpdateVisitForm";
     }
 
     // Spring MVC calls method loadPetWithVisit(...) before processNewVisitForm is called
     @PostMapping("/owners/{ownerId}/pets/{petId}/visits/new")
     public String processNewVisitForm(@Valid Visit visit, BindingResult result) {
         if (result.hasErrors()) {
-            return "pets/createOrUpdateVisitForm";
+            return "visits/createOrUpdateVisitForm";
         }
         else {
             this.visits.save(visit);

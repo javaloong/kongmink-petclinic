@@ -15,6 +15,8 @@
  */
 package org.javaloong.kongmink.petclinic.visits.service;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.javaloong.kongmink.petclinic.api.extension.PluginRegister;
@@ -37,8 +39,10 @@ public class VisitServiceImpl implements VisitService, PluginRegister {
     }
 
     @Override
-    public List<Visit> findByPetId(Integer petId) {
-        return visitRepository.findByPetId(petId);
+    public List<Visit> getVisits(Integer petId) {
+        List<Visit> visits = visitRepository.findByPetId(petId);
+        visits.sort(Comparator.comparing(Visit::getDate).reversed());
+        return Collections.unmodifiableList(visits);
     }
 
     @Override

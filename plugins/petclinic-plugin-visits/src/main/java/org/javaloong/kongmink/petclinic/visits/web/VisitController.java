@@ -15,6 +15,7 @@
  */
 package org.javaloong.kongmink.petclinic.visits.web;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -66,10 +67,11 @@ class VisitController {
     @ModelAttribute("visit")
     public Visit loadPetWithVisit(@PathVariable("petId") int petId, Map<String, Object> model) {
         Pet pet = this.pets.findById(petId);
-        pet.setVisitsInternal(this.visits.findByPetId(petId));
+        List<Visit> visits = this.visits.findByPetId(petId);
         model.put("pet", pet);
+        model.put("visits", visits);
         Visit visit = new Visit();
-        pet.addVisit(visit);
+        visit.setPetId(pet.getId());
         return visit;
     }
 

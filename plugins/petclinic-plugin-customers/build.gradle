@@ -7,7 +7,6 @@ description = 'petclinic-plugin-customers'
 dependencies {
     implementation project(':petclinic-api')
     implementation project(':petclinic-customers-api')
-    implementation project(':petclinic-visits-api')
     implementation "org.javaloong.kongmink:pf4j-spring-boot:$pf4jSpringBootVersion"
     
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -35,4 +34,13 @@ mainClassName = 'org.javaloong.kongmink.petclinic.customers.CustomerPluginStarte
 
 manifest {
     attributes 'Main-Class': 'org.javaloong.kongmink.petclinic.customers.CustomerPluginStarter'
+}
+
+task copyDependencies(type: Copy) {
+    dependsOn project(':petclinic-api').jar, project(':petclinic-visits-api').jar
+    from configurations.compileClasspath
+    into 'libs'
+    include 'petclinic-customers-api*.jar'
+    
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }

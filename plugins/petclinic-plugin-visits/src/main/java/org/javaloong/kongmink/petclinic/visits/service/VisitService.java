@@ -24,5 +24,5 @@ import org.javaloong.kongmink.petclinic.visits.model.Visit;
  */
 public interface VisitService {
 
-    List<Visit> findByPetId(Integer petId);
+    List<Visit> getVisits(Integer petId);
 }

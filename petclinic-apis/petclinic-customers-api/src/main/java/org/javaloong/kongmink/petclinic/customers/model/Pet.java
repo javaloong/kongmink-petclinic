@@ -16,24 +16,14 @@
 package org.javaloong.kongmink.petclinic.customers.model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.javaloong.kongmink.petclinic.api.model.NamedEntity;
-import org.javaloong.kongmink.petclinic.visits.model.Visit;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -59,9 +49,6 @@ public class Pet extends NamedEntity {
 	@JoinColumn(name = "owner_id")
 	private Owner owner;
 
-	@Transient
-	private Set<Visit> visits = new LinkedHashSet<>();
-
 	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
@@ -84,28 +71,6 @@ public class Pet extends NamedEntity {
 
 	public void setOwner(Owner owner) {
 		this.owner = owner;
-	}
-
-	protected Set<Visit> getVisitsInternal() {
-		if (this.visits == null) {
-			this.visits = new HashSet<>();
-		}
-		return this.visits;
-	}
-
-	public void setVisitsInternal(Collection<Visit> visits) {
-		this.visits = new LinkedHashSet<>(visits);
-	}
-
-	public List<Visit> getVisits() {
-		List<Visit> sortedVisits = new ArrayList<>(getVisitsInternal());
-		sortedVisits.sort(Comparator.comparing(Visit::getDate).reversed());
-		return Collections.unmodifiableList(sortedVisits);
-	}
-
-	public void addVisit(Visit visit) {
-		getVisitsInternal().add(visit);
-		visit.setPetId(this.getId());
 	}
 
 }

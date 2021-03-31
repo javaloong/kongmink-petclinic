@@ -17,13 +17,19 @@ package org.javaloong.kongmink.petclinic.customers.web;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.javaloong.kongmink.petclinic.customers.CustomerPlugin;
 import org.javaloong.kongmink.petclinic.customers.model.Owner;
+import org.javaloong.kongmink.petclinic.customers.model.Pet;
+import org.javaloong.kongmink.petclinic.customers.model.Visits;
 import org.javaloong.kongmink.petclinic.customers.repository.OwnerRepository;
+import org.javaloong.kongmink.petclinic.customers.service.VisitService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -134,8 +140,22 @@ class OwnerController {
 	public ModelAndView showOwner(@PathVariable("ownerId") int ownerId) {
 		ModelAndView mav = new ModelAndView("owners/ownerDetails");
 		Owner owner = this.owners.findById(ownerId);
+		Visits visits = getVisits(owner.getPets());
 		mav.addObject(owner);
+		mav.addObject("visits", visits);
 		return mav;
+	}
+	
+	private Visits getVisits(Collection<Pet> pets) {
+	    if(CollectionUtils.isEmpty(pets)) return null;
+	    
+	    Collection<Integer> petIds = pets.stream().map(Pet::getId)
+	            .collect(Collectors.toList());
+	    return CustomerPlugin.INSTANCE.getPluginManager()
+	            .getExtensions(VisitService.class)
+	            .stream().findFirst()
+	            .map(s -> s.getVisits(petIds))
+	            .orElse(null);
 	}
 
 }

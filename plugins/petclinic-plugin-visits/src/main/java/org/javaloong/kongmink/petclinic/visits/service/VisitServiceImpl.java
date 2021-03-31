@@ -15,11 +15,12 @@
  */
 package org.javaloong.kongmink.petclinic.visits.service;
 
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.Collection;
 import java.util.List;
 
 import org.javaloong.kongmink.petclinic.api.extension.PluginRegister;
+import org.javaloong.kongmink.petclinic.customers.model.Visits;
+import org.javaloong.kongmink.petclinic.customers.service.VisitService;
 import org.javaloong.kongmink.petclinic.visits.model.Visit;
 import org.javaloong.kongmink.petclinic.visits.repository.VisitRepository;
 import org.pf4j.Extension;
@@ -38,16 +39,13 @@ public class VisitServiceImpl implements VisitService, PluginRegister {
         this.visitRepository = visitRepository;
     }
 
-    @Override
-    public List<Visit> getVisits(Integer petId) {
-        List<Visit> visits = visitRepository.findByPetId(petId);
-        visits.sort(Comparator.comparing(Visit::getDate).reversed());
-        return Collections.unmodifiableList(visits);
+    public Visits getVisits(Collection<Integer> petIds) {
+        List<Visit> items = visitRepository.findByPetIdIn(petIds);
+        return new Visits(items);
     }
-
+    
     @Override
     public String name() {
         return "visit";
     }
-
 }

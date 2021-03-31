@@ -26,8 +26,11 @@ import org.springframework.format.support.FormattingConversionService;
  */
 public class CustomerPlugin extends SpringBootPlugin {
 
+    public static CustomerPlugin INSTANCE;
+    
     public CustomerPlugin(PluginWrapper wrapper) {
         super(wrapper);
+        INSTANCE = this;
     }
 
     @Override

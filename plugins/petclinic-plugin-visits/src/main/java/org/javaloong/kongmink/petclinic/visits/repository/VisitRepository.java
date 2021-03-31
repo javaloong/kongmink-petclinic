@@ -15,6 +15,7 @@
  */
 package org.javaloong.kongmink.petclinic.visits.repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.javaloong.kongmink.petclinic.api.model.BaseEntity;
@@ -44,4 +45,5 @@ public interface VisitRepository extends Repository<Visit, Integer> {
 
 	List<Visit> findByPetId(Integer petId);
 
+	List<Visit> findByPetIdIn(Collection<Integer> petIds);
 }

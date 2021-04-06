@@ -9,17 +9,18 @@ spring:
     validate-on-migrate: false
     locations: classpath:db/migration/hsqldb
    
----
+--- 
 spring:
   profiles: mysql
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/petclinic?autoReconnect=true&useUnicode=true&characterEncoding=UTF8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/petclinic?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: 
-  jpa:
-    database-platform: org.hibernate.dialect.MySQL5Dialect
-    hibernate:
-      ddl-auto: validate
+  flyway:
+    locations: classpath:db/migration/mysql
+    
+---
+spring:
+  profiles: docker
   flyway:
     locations: classpath:db/migration/mysql

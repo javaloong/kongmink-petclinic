@@ -28,3 +28,24 @@ spring:
       base-path: admin
 
 management:  endpoints:    web:      exposure:        include: "*"
+
+--- 
+spring:
+  profiles: mysql
+  datasource:
+    url: jdbc:mysql://localhost:3306/petclinic?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: 
+  pf4j:    plugin-profiles: mysql
+
+---
+spring:
+  profiles: docker
+  datasource:
+    url: ${MYSQL_URL:'jdbc:mysql://localhost/petclinic?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC'}
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASS:}
+  pf4j:
+    runtime-mode: deployment
+    plugin-profiles:
+      - docker

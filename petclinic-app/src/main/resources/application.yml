@@ -8,10 +8,11 @@ logging:
     root: INFO
     
 spring:
-  resources:
-    cache:      cachecontrol:        max-age: 12h
-    chain:
-      enabled: false
+  web:
+    resources:
+      cache:        cachecontrol:          max-age: 12h
+      chain:
+        enabled: false
   thymeleaf:    mode: HTML
   messages:    basename: messages/messages
   flyway:    enabled: false
@@ -31,7 +32,7 @@ management:  endpoints:    web:      exposure:        include: "*"
 
 --- 
 spring:
-  profiles: mysql
+  config:    activate:      on-profile: mysql
   datasource:
     url: jdbc:mysql://localhost:3306/petclinic?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: root
@@ -40,7 +41,9 @@ spring:
 
 ---
 spring:
-  profiles: docker
+  config:
+    activate:
+      on-profile: docker
   datasource:
     url: ${MYSQL_URL:'jdbc:mysql://localhost/petclinic?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC'}
     username: ${MYSQL_USER:root}

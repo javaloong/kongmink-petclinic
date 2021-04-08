@@ -11,7 +11,9 @@ spring:
    
 --- 
 spring:
-  profiles: mysql
+  config:
+    activate:
+      on-profile: mysql
   datasource:
     url: jdbc:mysql://localhost:3306/petclinic?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: root
@@ -21,6 +23,8 @@ spring:
     
 ---
 spring:
-  profiles: docker
+  config:
+    activate:
+      on-profile: docker
   flyway:
     locations: classpath:db/migration/mysql

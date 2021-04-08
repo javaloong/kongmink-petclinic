@@ -25,7 +25,7 @@ import org.pf4j.PluginState;
 import org.pf4j.PluginWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafProperties;
-import org.springframework.boot.autoconfigure.web.ResourceProperties;
+import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,16 +42,16 @@ import org.thymeleaf.templateresource.ITemplateResource;
 @Configuration(proxyBeanMethods = false)
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    private final ResourceProperties resourceProperties;
+    private final WebProperties webProperties;
 
-    WebMvcConfig(ResourceProperties resourceProperties) {
-        this.resourceProperties = resourceProperties;
+    WebMvcConfig(WebProperties webProperties) {
+        this.webProperties = webProperties;
     }
     
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        Duration cachePeriod = this.resourceProperties.getCache().getPeriod();
-        CacheControl cacheControl = this.resourceProperties.getCache().getCachecontrol().toHttpCacheControl();
+        Duration cachePeriod = this.webProperties.getResources().getCache().getPeriod();
+        CacheControl cacheControl = this.webProperties.getResources().getCache().getCachecontrol().toHttpCacheControl();
         registry.addResourceHandler("/webjars/**")
             .addResourceLocations("classpath:/META-INF/resources/webjars/")
             .setCachePeriod(getSeconds(cachePeriod)).setCacheControl(cacheControl)

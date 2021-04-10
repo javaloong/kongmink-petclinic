@@ -37,10 +37,12 @@ manifest {
 }
 
 task copyDependencies(type: Copy) {
-    dependsOn project(':petclinic-api').jar, project(':petclinic-visits-api').jar
+    dependsOn project(':petclinic-api').jar
     from configurations.compileClasspath
     into 'libs'
     include 'petclinic-customers-api*.jar'
     
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
+
+buildPlugin.dependsOn copyDependencies

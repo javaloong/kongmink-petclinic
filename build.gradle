@@ -122,19 +122,26 @@ subprojects {
                     "Plugin-Version": pluginProp.get("plugin.version"),
                     "Plugin-Provider": pluginProp.get("plugin.provider"),
                     "Plugin-Dependencies": pluginProp.get("plugin.dependencies"))
-            from configurations.localLibs.asFileTree.files.collect { zipTree(it) } // flat all lib classes into a fat Jar
-//            from configurations.localLibs.asFileTree.files
             with jar
+            doFirst {
+                from configurations.localLibs.asFileTree.files.collect { zipTree(it) } // flat all lib classes into a fat Jar
+    //            from configurations.localLibs.asFileTree.files
+            }
             doLast {
                 // Deploy built plugins...
             }
         }
 
-        task deployToLocal(type: Copy) {
+        task deployPluginToLocal(type: Copy) {
             group 'build'
             dependsOn buildPlugin
             from "$buildDir/libs/"
             into "$rootDir/build/${plugin}/plugins"
+        }
+        
+        task deployToLocal {
+            group 'build'
+            dependsOn deployPluginToLocal
         }
     }
 	

@@ -10,12 +10,17 @@ logging:
 spring:
   web:
     resources:
-      cache:        cachecontrol:          max-age: 12h
+      cache:
+        cachecontrol:
+          max-age: 12h
       chain:
         enabled: false
-  thymeleaf:    mode: HTML
-  messages:    basename: messages/messages
-  flyway:    enabled: false
+  thymeleaf:
+    mode: HTML
+  messages:
+    basename: messages/messages
+  flyway:
+    enabled: false
   pf4j:
     runtime-mode: development
     enabled: true
@@ -28,16 +33,23 @@ spring:
     controller:
       base-path: admin
 
-management:  endpoints:    web:      exposure:        include: "*"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
 --- 
 spring:
-  config:    activate:      on-profile: mysql
+  config:
+    activate:
+      on-profile: mysql
   datasource:
     url: jdbc:mysql://localhost:3306/petclinic?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: 
-  pf4j:    plugin-profiles: mysql
+  pf4j:
+    plugin-profiles: mysql
 
 ---
 spring:
@@ -45,9 +57,9 @@ spring:
     activate:
       on-profile: docker
   datasource:
-    url: ${MYSQL_URL:'jdbc:mysql://localhost/petclinic?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC'}
-    username: ${MYSQL_USER:root}
-    password: ${MYSQL_PASS:}
+    url: jdbc:mysql://mysql/${DB_DATABASE:petclinic}?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: ${DB_USER:petclinic}
+    password: ${DB_PASSWORD:password}
   pf4j:
     runtime-mode: deployment
     plugin-profiles:

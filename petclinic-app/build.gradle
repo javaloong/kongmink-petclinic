@@ -1,4 +1,5 @@
 plugins {
+    id 'com.palantir.docker' version '0.26.0'
     id 'org.springframework.boot'
     id 'application'
 }
@@ -41,4 +42,23 @@ mainClassName = 'org.javaloong.kongmink.petclinic.app.Application'
 
 manifest {
     attributes 'Main-Class': 'org.javaloong.kongmink.petclinic.app.Application'
+}
+
+task dockerPlugins(type: Copy) {
+    into("$buildDir/libs")
+    
+    rootProject.subprojects.each { subproject ->
+        if (isPluginProject(subproject)) {
+            into('plugins') {
+                from(subproject.libsDir)
+            }
+        }
+    }
+}
+
+docker {
+    dependsOn build
+    name "javaloong/kongmink/${project.name}"
+    tags 'latest'
+    copySpec.from(dockerPlugins).into("build/libs")
 }

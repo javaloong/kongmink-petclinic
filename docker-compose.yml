@@ -1,0 +1,28 @@
+version: '3'
+
+volumes:
+  mysql_data:
+    driver: local
+
+services:
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: petclinic
+      MYSQL_USER: petclinic
+      MYSQL_PASSWORD: password
+  petclinic:
+    image: javaloong/kongmink/petclinic-app
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_PF4J_PLUGINS_ROOT: ./plugins
+      DB_DATABASE: petclinic
+      DB_USER: petclinic
+      DB_PASSWORD: password
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql

@@ -8,7 +8,6 @@ rootProject.name = 'kongmink-petclinic'
 
 include 'petclinic-api',
 		'petclinic-customers-api',
-		'petclinic-visits-api',
 		'petclinic-app',
 		'petclinic-plugin-customers',
 		'petclinic-plugin-vets',
@@ -16,7 +15,6 @@ include 'petclinic-api',
 
 project(":petclinic-api").projectDir = file("petclinic-apis/petclinic-api")
 project(":petclinic-customers-api").projectDir = file("petclinic-apis/petclinic-customers-api")
-project(":petclinic-visits-api").projectDir = file("petclinic-apis/petclinic-visits-api")
 
 project(":petclinic-plugin-customers").projectDir = file("plugins/petclinic-plugin-customers")
 project(":petclinic-plugin-vets").projectDir = file("plugins/petclinic-plugin-vets")

@@ -9,18 +9,18 @@ description = 'petclinic-app'
 dependencies {
     implementation project(':petclinic-api')
     implementation "org.javaloong.kongmink:pf4j-spring-boot-starter:$pf4jSpringBootVersion"
-    
+
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation "org.springframework.boot:spring-boot-starter-validation"
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    
+
     implementation 'javax.cache:cache-api'
     implementation 'org.ehcache:ehcache'
     implementation 'org.flywaydb:flyway-core'
-    
+
     implementation 'org.webjars:webjars-locator-core'
     implementation "org.webjars:jquery:$webjarsJqueryVersion"
     implementation "org.webjars:jquery-ui:$webjarsJqueryUiVersion"
@@ -46,7 +46,7 @@ manifest {
 
 task dockerPlugins(type: Copy) {
     into("$buildDir/libs")
-    
+
     rootProject.subprojects.each { subproject ->
         if (isPluginProject(subproject)) {
             into('plugins') {
@@ -57,8 +57,7 @@ task dockerPlugins(type: Copy) {
 }
 
 docker {
-    dependsOn build
     name "javaloong/kongmink/${project.name}"
-    tags 'latest'
     copySpec.from(dockerPlugins).into("build/libs")
 }
+tasks.docker.dependsOn(build)
